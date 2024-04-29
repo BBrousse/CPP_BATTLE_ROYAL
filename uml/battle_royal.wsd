@@ -1,0 +1,123 @@
+@startuml battle_royal
+skinparam Linetype ortho
+	class CCharacterBuilder {
+		static generateDefault():CCharacter*
+		static generate(char_class: ECharacterClasse):CCharacter*
+	}
+
+	class CGameGrid {
+		-mGrid:int**
+		-mSizeX:int
+		-mSizeY:int
+		+CGameGrid(sizeX:int, sizeY:int)
+		+\~CGameGrid()
+		+placePlayer(index:int)
+		+removePlayer(index:int)
+		+removePlayer(x:int, y:int)
+		+to_string():string
+		+int operator[](x:int, y:int)
+		' printGrid()
+		' checkForFoe()
+	}
+
+	class CCharacter {
+		- mClass:CCharacterClasses
+		- mHp:int
+		- mHpMax:int
+		- mAtk:int
+		- mMvt:int
+		- mAtkRng:int
+		- mX:int
+		- mY:int
+		+updatePosition(x:int, y:int ):void
+		+dostep(&grid:CGameGrid, x:int, y:int):void
+		+move(&grid:GameGrid):void
+		+updatePosition(x:int,y:int):void
+		+attack(&foe:Caracter):void
+		+checkFoeInRange(CGameGrid grid):void
+		+isDead():bool
+		+takeDamage(dmg:int)
+		+to_string():string
+		
+	}
+
+	class CGameCore {
+		-mGameGrid:GameGrid
+		-mCharacter:CCharacter**
+		-mPlayerNumber:int
+		-mTurnNumber:int
+		+static initGame(playerNumber:int, x:int, y:int):CGameCore
+		+runGame():void
+		+doTurn():void
+		+doPlayerTurn(index:int):void
+		+checkState():bool
+		+endGame():void
+		+cleanGame():void
+		+placePlayer(index:int):void
+		+removeRlayer(foe:CCharacter):void
+		+to_string():string
+		+printGameGrid():void;
+		+printPlayerList():void;
+		+printState():void;
+	}
+
+	class CArcher {
+		-multiAttack:int
+	}
+
+	class CGunner {
+		+reloading():void
+	}
+
+	class CElf {
+		-longShotRange:int
+		+longShot()
+	}
+	' shooter -----
+
+	class CSoldier {
+		-curweapon:int
+		+changeWeapon():void
+	}
+
+	class CLord {
+		+mIntimidate():void
+	}
+
+	class CKnight {
+		-mIsMounted:bool
+		+horseCharge():void
+		+shieldBash():void
+	}
+
+	class CDwarf {
+		-mBeers:int
+		-mTurnDrunked:int
+		+drinkBeer():void
+	}
+	' fighter -----
+
+	class CShooter {
+		-mShotsMax:int
+		-mShots:int
+	}
+	
+	class CFighter {
+
+	}
+' ------------------------------- 
+
+	CCharacterBuilder "build" -- "is_built" CCharacter 
+	CCharacterBuilder -- CGameCore 
+	CArcher --|> CShooter 
+	CGunner --|> CShooter
+	CElf --|> CShooter
+	CSoldier --|> CFighter
+	CLord --|> CFighter
+	CKnight --|> CFighter
+	CDwarf --|> CFighter
+	CShooter --|> CCharacter
+	CFighter --|> CCharacter
+	CCharacter "0..n" --o "1" CGameCore
+	CGameGrid "1" --o "1" CGameCore
+@endif
